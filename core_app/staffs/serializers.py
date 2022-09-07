@@ -70,7 +70,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
-            'phone',
+            'image'
         ]
 
 
@@ -79,9 +79,19 @@ class StudentDetailSerializer(StudentSerializer):
     class Meta(StudentSerializer.Meta):
         fields = StudentSerializer.Meta.fields + [
             'father_name',
+            'phone',
             'birthday',
             'gender',
             'address',
             'created_at',
             'updated_at',
         ]
+
+
+class ImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Student
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': 'True'}}

@@ -1,3 +1,5 @@
+import os
+import uuid
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
@@ -8,6 +10,13 @@ from django.contrib.auth.models import (
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from phone_field import PhoneField
+
+
+def image_file_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    filename = f"{uuid.uuid4()}{ext}"
+
+    return os.path.join('uploads/', 'students', filename)
 
 
 class TeacherManager(BaseUserManager):
@@ -79,6 +88,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     father_name = models.CharField(max_length=32)
+    image = models.ImageField(null=True, upload_to=image_file_path)
     birthday = models.DateField(blank=True, null=True)
     phone = PhoneField()
     gender = models.CharField(max_length=1, choices=(('E', 'Erkak'), ('A', 'Ayol')), blank=True, null=True)
