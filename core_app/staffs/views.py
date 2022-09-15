@@ -3,9 +3,15 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import BasePermission
 
 from staffs import serializers
 from staffs.models import Teacher, Student
+
+
+class IsAdminUser(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_superuser)
 
 
 class CreateTeacherView(generics.CreateAPIView):
@@ -19,7 +25,7 @@ class CreateTokenView(ObtainAuthToken):
 
 class ManagerTeacherView(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.TeacherSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
@@ -27,16 +33,13 @@ class ManagerTeacherView(generics.RetrieveUpdateAPIView):
 
 class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TeacherSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUser]
     queryset = Teacher.objects.filter(is_active=True)
-
-    def perform_destroy(self, instance):
-        instance.is_active = False
 
 
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StudentDetailSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUser]
     queryset = Student.objects.all()
 
     def get_serializer_class(self):

@@ -11,6 +11,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from phone_field import PhoneField
 
+from lesson.models import Subject
+
 
 def image_file_path(instance, filename):
     ext = os.path.splitext(filename)[1]
@@ -71,6 +73,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     phone = PhoneField()
+    subject = models.ForeignKey(Subject, related_name='subject_teacher', on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -81,7 +84,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.subject} fani o'qituvchisi {self.first_name} {self.last_name}"
 
 
 class Student(models.Model):

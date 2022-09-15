@@ -15,8 +15,10 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name='api-schema'),
         name='api-docs',
     ),
-    # O'qituvchi va talabalar urli (staffs app urli)
+    # O'qituvchi va talabalar urli (staffs app urls)
     path('staffs/', include('staffs.urls')),
+    # Dars urllari (lesson app urls)
+    path('lesson/', include('lesson.urls'))
 ]
 
 if settings.DEBUG:

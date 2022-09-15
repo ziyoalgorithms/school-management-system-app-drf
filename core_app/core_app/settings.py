@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
 
     'staffs',
+    'lesson',
 ]
 
 AUTH_USER_MODEL = 'staffs.Teacher'

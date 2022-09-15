@@ -18,8 +18,8 @@ class TeacherSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'phone',
-            'is_active',
-            'is_staff',
+            'subject',
+            'password',
             'created_at',
             'updated_at',
         ]
