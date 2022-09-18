@@ -3,16 +3,12 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import BasePermission
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 from staffs import serializers
 from staffs.models import Teacher, Student
-
-
-class IsAdminUser(BasePermission):
-    def has_permission(self, request, view):
-        return bool(request.user and request.user.is_superuser)
-
+from management.permissions.isAdminUser import IsAdminUser
 
 class CreateTeacherView(generics.CreateAPIView):
     serializer_class = serializers.TeacherSerializer
@@ -33,13 +29,21 @@ class ManagerTeacherView(generics.RetrieveUpdateAPIView):
 
 class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TeacherSerializer
-    permission_classes = [IsAdminUser]
-    queryset = Teacher.objects.filter(is_active=True)
+    permission_classes = [IsAdminUser, ]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['first_name', 'last_name', 'subject']
+    search_fields = ['first_name', 'last_name', 'subject__name']
+    ordering_fields = ['first_name', 'last_name']
+    queryset = Teacher.objects.all()
 
 
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StudentDetailSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, ]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['first_name', 'last_name', 'father_name']
+    search_fields = ['first_name', 'last_name', 'father_name']
+    ordering_fields = ['first_name', 'last_name', 'father_name']
     queryset = Student.objects.all()
 
     def get_serializer_class(self):

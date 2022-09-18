@@ -94,7 +94,7 @@ class Student(models.Model):
     image = models.ImageField(null=True, upload_to=image_file_path)
     birthday = models.DateField(blank=True, null=True)
     phone = PhoneField()
-    gender = models.CharField(max_length=1, choices=(('E', 'Erkak'), ('A', 'Ayol')), blank=True, null=True)
+    gender = models.CharField(max_length=5, choices=(('ERKAK', 'Erkak'), ('AYOL', 'Ayol')), blank=True, null=True)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Subject(models.Model):
     name = models.CharField(max_length=32, unique=True)
     price = models.IntegerField()
@@ -31,8 +30,8 @@ class GroupJournal(models.Model):
 
 
 class AttendanceAndGrades(models.Model):
+    group_journal = models.ForeignKey(GroupJournal, related_name='att_and_grade', on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
-    group = models.ForeignKey(Group, related_name='att_and_grades', on_delete=models.SET_NULL, null=True, blank=True)
     GRADES = (
         ('2', 2),
         ('3', 3),
@@ -45,4 +44,4 @@ class AttendanceAndGrades(models.Model):
     teacher = models.ForeignKey('staffs.Teacher', related_name='attendance_and_grades', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.student} {self.status} {self.grade}"
+        return f"{self.date}  {self.group}  {self.status}  {self.grade}"

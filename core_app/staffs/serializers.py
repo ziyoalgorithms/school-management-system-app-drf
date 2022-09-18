@@ -9,6 +9,7 @@ from staffs.models import Student
 
 
 class TeacherSerializer(serializers.ModelSerializer):
+    groups = serializers.StringRelatedField(source='my_groups', many=True, read_only=True)
 
     class Meta:
         model = get_user_model()
@@ -19,6 +20,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             'last_name',
             'phone',
             'subject',
+            'groups',
             'password',
             'created_at',
             'updated_at',
@@ -63,6 +65,9 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    groups = serializers.StringRelatedField(source='group', many=True, read_only=True)
+    attendance_and_grade = serializers.StringRelatedField(source='attendance_and_grades', many=True, read_only=True)
+    payments = serializers.StringRelatedField(source='payment', many=True, read_only=True)
 
     class Meta:
         model = Student
@@ -83,6 +88,9 @@ class StudentDetailSerializer(StudentSerializer):
             'birthday',
             'gender',
             'address',
+            'groups',
+            'attendance_and_grade',
+            'payments',
             'created_at',
             'updated_at',
         ]

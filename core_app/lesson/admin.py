@@ -25,7 +25,6 @@ class GroupJournalAdmin(admin.ModelAdmin):
 
 @admin.register(AttendanceAndGrades)
 class AttendanceAndGradesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'group', 'date', 'student', 'status', 'grade']
-    list_filter = ['group', 'date']
+    list_display = ['id', 'group_journal', 'date', 'student', 'status', 'grade']
     search_fields = ['id', 'date', 'status']
 

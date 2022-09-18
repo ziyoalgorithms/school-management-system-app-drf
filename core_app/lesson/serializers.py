@@ -5,10 +5,11 @@ from lesson.models import Subject, Group, GroupJournal, AttendanceAndGrades
 
 
 class SubjectSerializer(serializers.ModelSerializer):
+    teachers = serializers.StringRelatedField(source='subject_teacher', many=True, read_only=True)
 
     class Meta:
         model = Subject
-        fields = ['id', 'name', 'price']
+        fields = ['id', 'name', 'price', 'teachers']
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -17,7 +18,7 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name', 'teacher', 'students']
 
-    def get_students(self, students, group):
+    def get_new_students(self, students, group):
         for student in students:
             student_obj = Student.objects.get(id=student.id)
             group.students.add(student_obj)
@@ -25,7 +26,7 @@ class GroupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         students = validated_data.pop('students', [])
         group = Group.objects.create(**validated_data)
-        self.get_students(students, group)
+        self.get_new_students(students, group)
 
         return group
 
@@ -33,7 +34,7 @@ class GroupSerializer(serializers.ModelSerializer):
         students = validated_data.pop('students', None)
         if students is not None:
             instance.students.clear()
-            self.get_students(students, instance)
+            self.get_new_students(students, instance)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -44,21 +45,22 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GroupJournalSerializer(serializers.ModelSerializer):
+    attendance_and_grades = serializers.StringRelatedField(source='att_and_grade', many=True, read_only=True)
 
     class Meta:
         model = GroupJournal
-        fields = ['id', 'date', 'group', 'theme']
+        fields = ['id', 'date', 'group', 'theme', 'attendance_and_grades']
 
 
 class AttendanceAdnGradesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttendanceAndGrades
-        fields = ['id', 'date', 'group', 'student', 'status', 'grade']
+        fields = ['id', 'date', 'group_journal', 'student', 'status', 'grade']
 
     def validate(self, data):
         validated_data = super().validate(data)
-        if validated_data['student'] not in validated_data['group'].students.all():
+        if validated_data['student'] not in validated_data['group_journal'].group.students.all():
             raise serializers.ValidationError('Kiritilgan talaba kiritilgan guruhda mavjud emas!')
 
         return validated_data

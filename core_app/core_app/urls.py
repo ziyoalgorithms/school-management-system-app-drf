@@ -18,7 +18,9 @@ urlpatterns = [
     # O'qituvchi va talabalar urli (staffs app urls)
     path('staffs/', include('staffs.urls')),
     # Dars urllari (lesson app urls)
-    path('lesson/', include('lesson.urls'))
+    path('lesson/', include('lesson.urls')),
+    # To'lov urllari (payment app urls)
+    path('payment/', include('payment.urls'))
 ]
 
 if settings.DEBUG:
