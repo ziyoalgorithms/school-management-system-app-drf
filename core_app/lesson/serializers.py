@@ -5,7 +5,11 @@ from lesson.models import Subject, Group, GroupJournal, AttendanceAndGrades
 
 
 class SubjectSerializer(serializers.ModelSerializer):
-    teachers = serializers.StringRelatedField(source='subject_teacher', many=True, read_only=True)
+    teachers = serializers.StringRelatedField(
+        source='subject_teacher',
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Subject
@@ -43,9 +47,12 @@ class GroupSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class GroupJournalSerializer(serializers.ModelSerializer):
-    attendance_and_grades = serializers.StringRelatedField(source='att_and_grade', many=True, read_only=True)
+    attendance_and_grades = serializers.StringRelatedField(
+        source='att_and_grade',
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = GroupJournal
@@ -60,7 +67,10 @@ class AttendanceAdnGradesSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validated_data = super().validate(data)
-        if validated_data['student'] not in validated_data['group_journal'].group.students.all():
-            raise serializers.ValidationError('Kiritilgan talaba kiritilgan guruhda mavjud emas!')
+        students = validated_data['group_journal'].group.students.all()
+        if validated_data['student'] not in students:
+            raise serializers.ValidationError(
+                'Kiritilgan talaba kiritilgan guruhda mavjud emas!'
+            )
 
         return validated_data

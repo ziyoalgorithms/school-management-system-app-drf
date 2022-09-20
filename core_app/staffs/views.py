@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, viewsets, status
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.settings import api_settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from staffs import serializers
 from staffs.models import Teacher, Student
 from management.permissions.isAdminUser import IsAdminUser
+
 
 class CreateTeacherView(generics.CreateAPIView):
     serializer_class = serializers.TeacherSerializer
@@ -21,6 +23,7 @@ class CreateTokenView(ObtainAuthToken):
 
 class ManagerTeacherView(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.TeacherSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -29,8 +32,13 @@ class ManagerTeacherView(generics.RetrieveUpdateAPIView):
 
 class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TeacherSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAdminUser, ]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
     filterset_fields = ['first_name', 'last_name', 'subject']
     search_fields = ['first_name', 'last_name', 'subject__name']
     ordering_fields = ['first_name', 'last_name']
@@ -39,8 +47,13 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.StudentDetailSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAdminUser, ]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
     filterset_fields = ['first_name', 'last_name', 'father_name']
     search_fields = ['first_name', 'last_name', 'father_name']
     ordering_fields = ['first_name', 'last_name', 'father_name']

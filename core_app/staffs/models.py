@@ -1,6 +1,5 @@
 import os
 import uuid
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager,
@@ -73,7 +72,13 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     phone = PhoneField()
-    subject = models.ForeignKey(Subject, related_name='subject_teacher', on_delete=models.SET_NULL, null=True, blank=True)
+    subject = models.ForeignKey(
+        Subject,
+        related_name='subject_teacher',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -84,7 +89,7 @@ class Teacher(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     def __str__(self):
-        return f"{self.subject} fani o'qituvchisi {self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Student(models.Model):
@@ -94,7 +99,11 @@ class Student(models.Model):
     image = models.ImageField(null=True, upload_to=image_file_path)
     birthday = models.DateField(blank=True, null=True)
     phone = PhoneField()
-    gender = models.CharField(max_length=5, choices=(('ERKAK', 'Erkak'), ('AYOL', 'Ayol')), blank=True, null=True)
+    gender = models.CharField(
+        max_length=5,
+        choices=(('ERKAK', 'Erkak'), ('AYOL', 'Ayol')),
+        blank=True, null=True
+    )
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

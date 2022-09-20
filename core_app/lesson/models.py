@@ -11,26 +11,45 @@ class Subject(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=16, unique=True)
-    teacher = models.ForeignKey('staffs.Teacher', related_name='my_groups', on_delete=models.SET_NULL, null=True, blank=True)
+    teacher = models.ForeignKey(
+        'staffs.Teacher',
+        related_name='my_groups',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     students = models.ManyToManyField('staffs.Student', related_name='group')
 
     def __str__(self):
         return f"{self.teacher.subject} fani bo'yicha {self.name} guruhi"
 
 
-
 class GroupJournal(models.Model):
     date = models.DateField(auto_now_add=True)
-    group = models.ForeignKey(Group, related_name='journal', on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        Group,
+        related_name='journal',
+        on_delete=models.CASCADE,
+    )
     theme = models.TextField()
-    teacher = models.ForeignKey('staffs.Teacher', related_name='group_journals', on_delete=models.SET_NULL, null=True, blank=True)
+    teacher = models.ForeignKey(
+        'staffs.Teacher',
+        related_name='group_journals',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return f"{self.group} {self.date}"
 
 
 class AttendanceAndGrades(models.Model):
-    group_journal = models.ForeignKey(GroupJournal, related_name='att_and_grade', on_delete=models.CASCADE)
+    group_journal = models.ForeignKey(
+        GroupJournal,
+        related_name='att_and_grade',
+        on_delete=models.CASCADE,
+    )
     date = models.DateField(auto_now_add=True)
     GRADES = (
         ('2', 2),
@@ -38,10 +57,25 @@ class AttendanceAndGrades(models.Model):
         ('4', 4),
         ('5', 5),
     )
-    student = models.ForeignKey('staffs.Student', related_name='attendance_and_grades', on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        'staffs.Student',
+        related_name='attendance_and_grades',
+        on_delete=models.CASCADE,
+    )
     status = models.BooleanField(default=True)
-    grade = models.CharField(max_length=1, choices=GRADES, null=True, blank=True)
-    teacher = models.ForeignKey('staffs.Teacher', related_name='attendance_and_grades', on_delete=models.SET_NULL, null=True, blank=True)
+    grade = models.CharField(
+        max_length=1,
+        choices=GRADES,
+        null=True,
+        blank=True,
+    )
+    teacher = models.ForeignKey(
+        'staffs.Teacher',
+        related_name='attendance_and_grades',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
-        return f"{self.date}  {self.group}  {self.status}  {self.grade}"
+        return f"{self.date}  {self.group_journal}  {self.status} {self.grade}"

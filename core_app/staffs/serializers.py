@@ -9,7 +9,11 @@ from staffs.models import Student
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    groups = serializers.StringRelatedField(source='my_groups', many=True, read_only=True)
+    groups = serializers.StringRelatedField(
+        source='my_groups',
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = get_user_model()
@@ -57,7 +61,9 @@ class AuthTokenSerializer(serializers.Serializer):
             password=password,
         )
         if not user:
-            msg = _("Berilgan ma'lumotlar bilan autentifikatsiyadab o'tib bo'lmaydi!")
+            msg = _(
+                "Ushbu ma'lumotlar bilan autentifikatsiyadab o'tib bo'lmaydi!"
+            )
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
@@ -65,9 +71,21 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    groups = serializers.StringRelatedField(source='group', many=True, read_only=True)
-    attendance_and_grade = serializers.StringRelatedField(source='attendance_and_grades', many=True, read_only=True)
-    payments = serializers.StringRelatedField(source='payment', many=True, read_only=True)
+    groups = serializers.StringRelatedField(
+        source='group',
+        many=True,
+        read_only=True,
+    )
+    attendance_and_grade = serializers.StringRelatedField(
+        source='attendance_and_grades',
+        many=True,
+        read_only=True,
+    )
+    payments = serializers.StringRelatedField(
+        source='payment',
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Student

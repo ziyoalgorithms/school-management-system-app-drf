@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from lesson.models import Subject, Group, GroupJournal, AttendanceAndGrades
 
+
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'price']
@@ -25,6 +26,12 @@ class GroupJournalAdmin(admin.ModelAdmin):
 
 @admin.register(AttendanceAndGrades)
 class AttendanceAndGradesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'group_journal', 'date', 'student', 'status', 'grade']
+    list_display = [
+        'id',
+        'group_journal',
+        'date',
+        'student',
+        'status',
+        'grade',
+    ]
     search_fields = ['id', 'date', 'status']
-

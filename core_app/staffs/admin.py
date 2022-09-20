@@ -5,14 +5,18 @@ from django.utils.translation import gettext_lazy as _
 from staffs import models
 
 
-
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['id', 'first_name', 'last_name']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ('first_name', 'last_name', 'phone', 'subject')}),
+        (_('Personal Info'), {'fields': (
+            'first_name',
+            'last_name',
+            'phone',
+            'subject',
+        )}),
         (
             _('Permissions'),
             {
@@ -47,8 +51,8 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
-
 admin.site.register(models.Teacher, UserAdmin)
+
 
 @admin.register(models.Student)
 class StudentAdmin(admin.ModelAdmin):

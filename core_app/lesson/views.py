@@ -1,4 +1,5 @@
 from rest_framework import viewsets, mixins, permissions
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,8 +17,13 @@ class SubjectViewSet(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     serializer_class = serializers.SubjectSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
     search_fields = ['name', 'price']
     filterset_fields = ['name', 'price']
     ordering_fields = ['price', ]
@@ -26,8 +32,13 @@ class SubjectViewSet(mixins.CreateModelMixin,
 
 class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.GroupSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
     search_fields = ['name', 'teacher__first_name', 'students__first_name']
     ordering_fields = ['name']
     filterset_fields = ['name', 'teacher__first_name', 'students__first_name']
@@ -56,8 +67,13 @@ class GroupJournalViewSet(mixins.CreateModelMixin,
                           mixins.ListModelMixin,
                           viewsets.GenericViewSet):
     serializer_class = serializers.GroupJournalSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
     search_fields = ['date', 'group__name', 'teacher__first_name']
     ordering_fields = ['date']
     filterset_fields = ['date', 'group__name', 'teacher__first_name']
@@ -76,11 +92,31 @@ class AttendanceAndGradesViewSet(mixins.CreateModelMixin,
                                  mixins.ListModelMixin,
                                  viewsets.GenericViewSet):
     serializer_class = serializers.AttendanceAdnGradesSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['date', 'group__name', 'student__first_name', 'student__last_name', 'status', 'grade', 'teacher__first_name']
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    search_fields = [
+        'date',
+        'group__name',
+        'student__first_name',
+        'student__last_name',
+        'status',
+        'grade',
+        'teacher__first_name',
+    ]
     ordering_fields = ['date', 'student__first_name', 'student__last_name', ]
-    filterset_fields = ['date', 'student__first_name', 'student__last_name', 'status', 'grade', 'teacher__first_name']
+    filterset_fields = [
+        'date',
+        'student__first_name',
+        'student__last_name',
+        'status',
+        'grade',
+        'teacher__first_name',
+    ]
     queryset = AttendanceAndGrades.objects.all()
 
     def get_queryset(self):
