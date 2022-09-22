@@ -1,7 +1,4 @@
-from django.contrib.auth import (
-    get_user_model,
-    authenticate,
-)
+from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 
@@ -61,9 +58,7 @@ class AuthTokenSerializer(serializers.Serializer):
             password=password,
         )
         if not user:
-            msg = _(
-                "Ushbu ma'lumotlar bilan autentifikatsiyadab o'tib bo'lmaydi!"
-            )
+            msg = _("Foydalanuvchi mavjud emas!")
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
