@@ -148,16 +148,6 @@ REST_FRAMEWORK = {
 }
 
 
-SWAGGER_SETTINGS={
-    'SECURITY_DEFINITIONS':{
-        'Bearer':{
-            'type':'apiKey',
-            'in':'header',
-            'name':'Authorization'
-        }
-    }
-}
-
 SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True
 }
